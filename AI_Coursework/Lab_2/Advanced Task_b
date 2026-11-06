@@ -1,0 +1,166 @@
+import random
+import math
+
+config = {}
+
+
+def Parameters():
+    global config
+    print("=== Network Parameters Setup ===")
+    num_inputs = int(input("Enter number of inputs: "))
+    num_hidden = int(input("Enter number of hidden units: "))
+    num_outputs = int(input("Enter number of output units: "))
+    epochs = int(input("Enter number of epochs: "))
+    learning_rate = float(input("Enter learning rate (alpha): "))
+    activation = input("Enter activation function (e.g. sigmoid): ")
+
+    config = {
+        "num_inputs": num_inputs,
+        "num_hidden": num_hidden,
+        "num_outputs": num_outputs,
+        "epochs": epochs,
+        "learning_rate": learning_rate,
+        "activation": activation,
+    }
+
+
+def Input():
+    print("\n=== Data Input Selection ===")
+    choice = input("Enter '1' for manual input or '2' for default XOR dataset: ")
+
+    if choice == "2":
+        # Standard XOR dataset based on the task table
+        X = [[1, 1], [1, 0], [0, 1], [0, 0]]
+        y = [[0], [1], [1], [0]]
+        print("Loaded default XOR dataset successfully.")
+        return X, y
+    else:
+        num_samples = int(input("Enter number of samples: "))
+        X, y = [], []
+        for i in range(num_samples):
+            inp = [
+                float(x)
+                for x in input(f"Sample {i + 1} inputs (space-separated): ").split()
+            ]
+            out = [
+                float(x)
+                for x in input(
+                    f"Sample {i + 1} target outputs (space-separated): "
+                ).split()
+            ]
+            X.append(inp)
+            y.append(out)
+        return X, y
+
+
+def Structure():
+    network = {
+        "num_inputs": config["num_inputs"],
+        "num_hidden": config["num_hidden"],
+        "num_outputs": config["num_outputs"],
+        "W1": [],
+        "W2": [],
+        "b1": [random.random() for _ in range(config["num_hidden"])],
+        "b2": [random.random() for _ in range(config["num_outputs"])]
+    }
+    return network
+
+
+def Initalise(network):
+    # Weights between input layer and hidden layer (W1)
+    network["W1"] = [
+        [random.random() for _ in range(network["num_inputs"])]
+        for _ in range(network["num_hidden"])
+    ]
+    # Weights between hidden layer and output layer (W2)
+    network["W2"] = [
+        [random.random() for _ in range(network["num_hidden"])]
+        for _ in range(network["num_outputs"])
+    ]
+
+
+def activate(x):
+    # Sigmoid activation function (Equation 1)
+    return 1 / (1 + math.exp(-max(-500, min(500, x))))
+
+
+def activate_derivative(output):
+    return output * (1 - output)
+
+
+def Output(network, sample_inputs):
+    # Forward Pass — calculation of weighted sum and activation
+    hidden_outputs = []
+    for j in range(network["num_hidden"]):
+        weighted_sum = network["b1"][j]
+        for i in range(network["num_inputs"]):
+            weighted_sum += sample_inputs[i] * network["W1"][j][i]
+        hidden_outputs.append(activate(weighted_sum))
+
+    final_outputs = []
+    for k in range(network["num_outputs"]):
+        weighted_sum = network["b2"][k]
+        for j in range(network["num_hidden"]):
+            weighted_sum += hidden_outputs[j] * network["W2"][k][j]
+        final_outputs.append(activate(weighted_sum))
+
+    return hidden_outputs, final_outputs
+
+
+def WeightUpdate(network, sample_inputs, hidden_outputs, final_outputs, target):
+    lr = config["learning_rate"]
+
+    # Error and delta for the output layer (Equation 2)
+    output_errors = [target[k] - final_outputs[k] for k in range(network["num_outputs"])]
+    output_deltas = [output_errors[k] * activate_derivative(final_outputs[k]) for k in range(network["num_outputs"])]
+
+    # Error and delta for the hidden layer
+    hidden_deltas = []
+    for j in range(network["num_hidden"]):
+        error = sum(output_deltas[k] * network["W2"][k][j] for k in range(network["num_outputs"]))
+        hidden_deltas.append(error * activate_derivative(hidden_outputs[j]))
+
+    # Update weights and biases for W2
+    for k in range(network["num_outputs"]):
+        for j in range(network["num_hidden"]):
+            network["W2"][k][j] += lr * output_deltas[k] * hidden_outputs[j]
+        network["b2"][k] += lr * output_deltas[k]
+
+    # Update weights and biases for W1
+    for j in range(network["num_hidden"]):
+        for i in range(network["num_inputs"]):
+            network["W1"][j][i] += lr * hidden_deltas[j] * sample_inputs[i]
+        network["b1"][j] += lr * hidden_deltas[j]
+
+
+def Introduced(network, X, y):
+    epochs = config["epochs"]
+    dataset = list(zip(X, y))
+
+    for epoch in range(epochs):
+        # Present training samples in random order for each epoch
+        random.shuffle(dataset)
+        for sample_inputs, target in dataset:
+            hidden_outputs, final_outputs = Output(network, sample_inputs)
+            WeightUpdate(network, sample_inputs, hidden_outputs, final_outputs, target)
+
+
+def Print(network):
+    print("\n=== Training Complete ===")
+    print("Layer 1 weights (W1):")
+    for row in network["W1"]:
+        print(row)
+    print("Layer 2 weights (W2):")
+    for row in network["W2"]:
+        print(row)
+
+
+if __name__ == "__main__":
+    Parameters()
+    X, y = Input()
+    net = Structure()
+    Initalise(net)
+
+    print("\nTraining network...")
+    Introduced(net, X, y)
+    Print(net)
