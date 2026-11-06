@@ -1,1 +1,31 @@
+The formula for Gini Impurity is: 1 - (Class1 / Total)^2 - (Class2 / Total)^2 
 
+Income
+High (17 records: 5 Citroen Ami, 12 Range Rover):
+ Gini(High) = 1 - (5 / (5 + 12))^2 - (12 / (5 + 12))^2
+ Gini(High) = 1 - (5 / 17)^2 - (12 / 17)^2 = 1 - 0.0865 - 0.4983 = 0.4152
+Low (13 records: 11 Citroen Ami, 2 Range Rover):
+ Gini(Low) = 1 - (11 / (11 + 2))^2 - (2 / (11 + 2))^2
+ Gini(Low) = 1 - (11 / 13)^2 - (2 / 13)^2 = 1 - 0.7160 - 0.0237 = 0.2604
+Weighted Gini Impurity for Income:
+Gini(Income) = (17 / 30 * 0.4152) + (13 / 30 * 0.2604) = 0.2353 + 0.1128 = 0.3481
+
+Where Live
+Rural (13 records: 7 Citroen Ami, 6 Range Rover):
+ Gini(Rural) = 1 - (7 / (7 + 6))^2 - (6 / (7 + 6))^2
+ Gini(Rural) = 1 - (7 / 13)^2 - (6 / 13)^2 = 1 - 0.2899 - 0.2130 = 0.4970
+Urban (17 records: 9 Citroen Ami, 8 Range Rover):
+ Gini(Urban) = 1 - (9 / (9 + 8))^2 - (8 / (9 + 8))^2
+ Gini(Urban) = 1 - (9 / 17)^2 - (8 / 17)^2 = 1 - 0.2803 - 0.2215 = 0.4983
+Weighted Gini Impurity for Where Live:
+Gini(Where Live) = (13 / 30 * 0.4970) + (17 / 30 * 0.4983) = 0.2154 + 0.2824 = 0.4978
+
+Climate Change
+Yes (16 records: 13 Citroen Ami, 3 Range Rover):
+ Gini(Yes) = 1 - (13 / (13 + 3))^2 - (3 / (13 + 3))^2
+ Gini(Yes) = 1 - (13 / 16)^2 - (3 / 16)^2 = 1 - 0.6602 - 0.0352 = 0.3047
+No (14 records: 3 Citroen Ami, 11 Range Rover):
+ Gini(No) = 1 - (3 / (3 + 11))^2 - (11 / (3 + 11))^2
+ Gini(No) = 1 - (3 / 14)^2 - (11 / 14)^2 = 1 - 0.0459 - 0.6173 = 0.3367
+Weighted Gini Impurity for Climate Change:
+Gini(Climate) = (16 / 30 * 0.3047) + (14 / 30 * 0.3367) = 0.1625 + 0.1571 = 0.3196
