@@ -1,3 +1,6 @@
-First, I created four walls using Add -  Primitive shape - Cuboid to build a closed arena so the robot would not drive off the edge. To make sure the robot actually bumps into the walls instead of passing right through them, I adjusted the physics settings in Dynamic properties: I checked Body is responsive for collisions and unchecked Body is dynamic so the walls stay fixed in place.
-Next, I added some furniture and props from the Model browser to make the environment look like a proper room. Since the default library models were way too big for my arena, I resized them using the Pos. Scaling tab until the proportions looked right. Finally, I customised the colours of the robot and walls through Scene Object Properties - Colour to give the scene a finished look.
-
+First, I created four walls using Add -  Primitive shape - Cuboid to build a closed arena so the robot would not drive off the edge. 
+To make sure the robot actually bumps into the walls instead of passing right through them, I adjusted the physics settings in Dynamic properties: 
+I checked Body is responsive for collisions and unchecked Body is dynamic so the walls stay fixed in place.
+Next, I added some furniture and props from the Model browser to make the environment look like a proper room. 
+Since the default library models were way too big for my arena, I resized them using the Pos.Scaling tab until the proportions looked right. 
+Finally, I customised the colours of the robot and walls through Scene Object Properties - Colour to give the scene a finished look.
