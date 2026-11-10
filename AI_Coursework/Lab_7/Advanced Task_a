@@ -1,1 +1,94 @@
+For this part of the project, I built the travel assistant chatbot in Python using a few core concepts from the module. 
+Basically, the script uses simple keyword search to scan user inputs for topics like European destinations, budgets, flight anxiety, or safety tips. 
+I also added some basic emotion recognition so if a user mentions feeling nervous, the bot picks up on it and gives a more reassuring response. 
+To make it feel more tailored, there’s an onboarding sequence at the start that saves user details—like their travel experience—to personalize answers on the fly. 
+Finally, I used Python’s random module to vary greetings and fallback messages so the conversation doesn't feel repetitive. 
+Overall, it keeps the code simple and functional while covering all the required chatbot features.
 
+import random
+
+
+GREETINGS = [
+    "Hello! Welcome to your travel assistant.",
+    "Hi there! Ready to plan your next journey?",
+    "Greetings! I'm here to help you with your travel needs.",
+]
+
+FAILS = [
+    "Hmm, I didn't quite catch that. Could you rephrase your question about travel?",
+    (
+        "That's interesting, but I'm not sure how to answer. Try asking about"
+        " Europe, budgets, or travel tips!"
+    ),
+]
+
+
+def travel_chatbot():
+    print(random.choice(GREETINGS))
+
+    name = input("What is your name? ")
+    experience = input(
+        "What is your travel experience? (beginner / experienced) "
+    ).lower()
+    comfort = input(
+        "How comfortable do you feel planning trips? (nervous / confident) "
+    ).lower()
+
+    print(f"\nNice to meet you, {name}! I've noted everything down.\n")
+    print(
+        "Feel free to ask questions like: 'What are the best places to visit in"
+        " Europe?', 'Is travelling alone safe?', or 'How do I plan a budget?'"
+    )
+    print("Type 'exit' or 'quit' to end the chat.\n")
+
+    while True:
+        user_input = input(f"{name}: ").lower()
+
+        if "exit" in user_input or "quit" in user_input:
+            print(f"Goodbye, {name}! Have a wonderful trip!")
+            break
+
+        if (
+            "nervous" in user_input
+            or "scared" in user_input
+            or "afraid" in user_input
+            or "worried" in user_input
+        ):
+            print(
+                "Bot: 💙 I notice you're feeling a bit nervous. That is"
+                " completely normal before a trip! Let's take it one step at a"
+                " time."
+            )
+
+        elif "europe" in user_input or "places" in user_input or "visit" in user_input:
+            if "beginner" in experience or "nervous" in comfort:
+                print(
+                    f"Bot: {name}, since you are newer to travel, I recommend"
+                    " starting with beginner-friendly cities like Prague or"
+                    " Budapest."
+                )
+            else:
+                print(
+                    "Bot: For an experienced traveler like you, exploring hidden"
+                    " gems in Portugal or alpine routes in Austria would be"
+                    " fantastic."
+                )
+
+        elif "alone" in user_input or "safe" in user_input:
+            print(
+                "Bot: Solo travel is an incredible experience! Just stick to"
+                " well-rated safe destinations like Iceland or Japan."
+            )
+
+        elif "budget" in user_input or "cheap" in user_input or "money" in user_input:
+            print(
+                "Bot: To plan a budget-friendly trip, book flights in advance,"
+                " stay in hostels, and use public transport."
+            )
+
+        else:
+            print(f"Bot: {random.choice(FAILS)}")
+
+
+if __name__ == "__main__":
+    travel_chatbot()
